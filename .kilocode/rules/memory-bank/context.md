@@ -1,87 +1,62 @@
-# Active Context: Next.js Starter Template
+# Active Context: Malayalam Reader App
 
 ## Current State
 
-**Template Status**: ✅ Ready for development
+**App Status**: ✅ Complete - Standalone HTML app for Malayalam reading speed improvement
 
-The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. It's ready for AI-assisted expansion to build any type of application.
+The app is a single-file HTML application (`malayalam-reader.html`) that helps users improve Malayalam reading speed by providing hover/tap transliteration of words.
 
 ## Recently Completed
 
-- [x] Base Next.js 16 setup with App Router
-- [x] TypeScript configuration with strict mode
-- [x] Tailwind CSS 4 integration
-- [x] ESLint configuration
-- [x] Memory bank documentation
-- [x] Recipe system for common features
+- [x] Malayalam-to-Latin transliteration engine (built-in, no external deps)
+- [x] 6 embedded sample texts (Ramayana, Kumaran Asan, Vayalar, Basheer, proverbs, Madhavikutty)
+- [x] Word hover tooltips showing phonetic transliteration (desktop)
+- [x] Touch-based transliteration display (mobile)
+- [x] Full text transliteration panel
+- [x] English translation via MyMemory API (free, no key required)
+- [x] Custom text paste feature
+- [x] Mobile-first responsive design
+- [x] Noto Serif Malayalam font from Google Fonts
 
-## Current Structure
+## App Architecture
 
-| File/Directory | Purpose | Status |
-|----------------|---------|--------|
-| `src/app/page.tsx` | Home page | ✅ Ready |
-| `src/app/layout.tsx` | Root layout | ✅ Ready |
-| `src/app/globals.css` | Global styles | ✅ Ready |
-| `.kilocode/` | AI context & recipes | ✅ Ready |
+| Component | Implementation |
+|-----------|---------------|
+| Transliteration engine | Custom character-level Malayalam→Latin mapping (Mozhi scheme) |
+| Translation API | MyMemory (`api.mymemory.translated.net/get?q=...&langpair=ml\|en`) |
+| Font | Noto Serif Malayalam (Google Fonts CDN) |
+| Sample texts | 6 embedded literary excerpts + proverbs |
 
-## Current Focus
+## Key Design Decisions
 
-The template is ready. Next steps depend on user requirements:
+1. **Standalone HTML**: Single file, no build step, works offline (except translation)
+2. **Mozhi romanization**: ASCII-friendly transliteration (e.g., `aa` not `ā`)
+3. **Touch support**: Fixed bottom tooltip for mobile, CSS hover for desktop
+4. **MyMemory API**: Free, 500 bytes/request limit, ~5000 words/day free tier
 
-1. What type of application to build
-2. What features are needed
-3. Design/branding preferences
+## Text Sources for Malayalam Content
 
-## Quick Start Guide
+### Best Sources (Public Domain / Free)
 
-### To add a new page:
+| Source | URL | Content |
+|--------|-----|---------|
+| Malayalam Wikisource | `ml.wikisource.org` | Public domain literary works (Ezhuthachan, etc.) |
+| Malayalam Wikipedia | `ml.wikipedia.org` | Encyclopedic articles, news topics |
+| Internet Archive | `archive.org` | Scanned books (Adhyatma Ramayanam, etc.) |
+| Malayalam news sites | `mathrubhumi.com`, `manoramaonline.com` | Current news articles |
+| DC Books | `dcbooks.com` | Book excerpts (some free) |
+| Kerala Sahitya Akademi | `sahityaakademi.gov.in` | Literary works |
 
-Create a file at `src/app/[route]/page.tsx`:
-```tsx
-export default function NewPage() {
-  return <div>New page content</div>;
-}
-```
+### Recommended for Reading Practice
 
-### To add components:
-
-Create `src/components/` directory and add components:
-```tsx
-// src/components/ui/Button.tsx
-export function Button({ children }: { children: React.ReactNode }) {
-  return <button className="px-4 py-2 bg-blue-600 text-white rounded">{children}</button>;
-}
-```
-
-### To add a database:
-
-Follow `.kilocode/recipes/add-database.md`
-
-### To add API routes:
-
-Create `src/app/api/[route]/route.ts`:
-```tsx
-import { NextResponse } from "next/server";
-
-export async function GET() {
-  return NextResponse.json({ message: "Hello" });
-}
-```
-
-## Available Recipes
-
-| Recipe | File | Use Case |
-|--------|------|----------|
-| Add Database | `.kilocode/recipes/add-database.md` | Data persistence with Drizzle + SQLite |
-
-## Pending Improvements
-
-- [ ] Add more recipes (auth, email, etc.)
-- [ ] Add example components
-- [ ] Add testing setup recipe
+1. **Malayalam proverbs** (പഴഞ്ചൊല്ലുകൾ) — Short, simple sentences
+2. **Children's stories** (കുട്ടിക്കഥകൾ) — Simpler vocabulary
+3. **News headlines** — Modern, conversational Malayalam
+4. **Folk songs** (നാടോടിപ്പാട്ടുകൾ) — Rhythmic, easy to follow
+5. **Adhyatma Ramayanam** — Classic, widely known (good for familiarity)
 
 ## Session History
 
 | Date | Changes |
 |------|---------|
-| Initial | Template created with base setup |
+| 2026-03-29 | Malayalam Reader app created as standalone HTML file |

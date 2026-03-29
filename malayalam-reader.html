@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Malayalam Reader — Read Faster</title>
+<style>
+  :root {
+    --bg: #faf8f5;
+    --surface: #ffffff;
+    --primary: #c2185b;
+    --primary-light: #f8bbd0;
+    --text: #2c2c2c;
+    --text-secondary: #666;
+    --border: #e0d6cc;
+    --tooltip-bg: #333;
+    --tooltip-text: #fff;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100dvh;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .app {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  header {
+    text-align: center;
+    padding: 24px 0 16px;
+  }
+
+  header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+  }
+
+  header p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  .controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 16px 0;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 24px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .btn:active { transform: scale(0.96); }
+
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  .btn-primary:hover { background: #a0144d; }
+
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+  }
+
+  .btn-secondary:hover { background: #f5f0eb; }
+  .btn-secondary.active {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .text-selector {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .text-selector button {
+    padding: 6px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    background: var(--surface);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .text-selector button.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
+
+  .text-panel {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 16px;
+    min-height: 200px;
+    position: relative;
+  }
+
+  .text-panel .label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+
+  .malayalam-text {
+    font-family: 'Noto Serif Malayalam', 'Manjari', 'Meera', serif;
+    font-size: 1.25rem;
+    line-height: 2;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .malayalam-text .word {
+    position: relative;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background 0.15s;
+    display: inline;
+    padding: 1px 0;
+  }
+
+  .malayalam-text .word:hover,
+  .malayalam-text .word.touched {
+    background: var(--primary-light);
+  }
+
+  .malayalam-text .word .tip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--tooltip-bg);
+    color: var(--tooltip-text);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 100;
+    pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+
+  .malayalam-text .word .tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--tooltip-bg);
+  }
+
+  .malayalam-text .word:hover .tip,
+  .malayalam-text .word.touched .tip {
+    display: block;
+  }
+
+  .transliteration-text,
+  .translation-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+
+  .loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .source-info {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  .tip-mobile {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--tooltip-bg);
+    color: var(--tooltip-text);
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 200;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    transition: opacity 0.2s;
+    max-width: 90vw;
+    text-align: center;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .malayalam-text .word .tip { display: none !important; }
+    .tip-mobile { display: block; opacity: 0; }
+    .tip-mobile.visible { opacity: 1; }
+  }
+
+  .custom-input-panel {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .custom-text-area {
+    width: 100%;
+    min-height: 120px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'Noto Serif Malayalam', 'Manjari', 'Meera', serif;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    resize: vertical;
+    margin-bottom: 12px;
+  }
+
+  .custom-text-area:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+
+  .hidden { display: none !important; }
+
+  .footer {
+    text-align: center;
+    padding: 24px 0 16px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .footer a { color: var(--primary); text-decoration: none; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>മലയാളം Reader</h1>
+    <p>Hover over words for transliteration</p>
+  </header>
+
+  <div class="controls">
+    <button class="btn btn-primary" id="btnShowText" onclick="showRandomText()">📖 Show Text</button>
+    <button class="btn btn-secondary" id="btnTransliterate" onclick="toggleTransliteration()" disabled>🔤 Transliteration</button>
+    <button class="btn btn-secondary" id="btnTranslate" onclick="toggleTranslation()" disabled>🌐 Translation</button>
+    <button class="btn btn-secondary" id="btnCustom" onclick="toggleCustomInput()">✍️ Paste Text</button>
+  </div>
+
+  <div class="custom-input-panel hidden" id="customPanel">
+    <textarea id="customTextArea" class="custom-text-area" placeholder="Paste Malayalam text here..."></textarea>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;">
+      <button class="btn btn-primary" onclick="loadCustomText()">Load Text</button>
+      <button class="btn btn-secondary" onclick="toggleCustomInput()">Cancel</button>
+    </div>
+  </div>
+
+  <div class="text-selector" id="textSelector"></div>
+
+  <div class="text-panel" id="mainPanel">
+    <div class="label">Malayalam Text</div>
+    <div id="textDisplay" class="malayalam-text">
+      <span style="color:var(--text-secondary); font-family: sans-serif; font-size: 0.9rem;">
+        Click <strong>"Show Text"</strong> to load a Malayalam passage, or select one above.
+      </span>
+    </div>
+  </div>
+
+  <div class="text-panel hidden" id="transliterationPanel">
+    <div class="label">Transliteration (Mozhi)</div>
+    <div id="transliterationDisplay" class="transliteration-text"></div>
+  </div>
+
+  <div class="text-panel hidden" id="translationPanel">
+    <div class="label">English Translation</div>
+    <div id="translationDisplay" class="translation-text"></div>
+  </div>
+
+  <div class="source-info" id="sourceInfo"></div>
+
+  <div class="tip-mobile" id="mobileTip"></div>
+
+  <div class="footer">
+    Malayalam Reader — Hover/tap words for phonetic help<br>
+    Transliteration via built-in engine &middot; Translation via
+    <a href="https://mymemory.translated.net/" target="_blank">MyMemory</a>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// MALAYALAM TRANSLITERATION ENGINE (Malayalam → Latin/Mozhi)
+// ============================================================
+
+const INDEPENDENT_VOWELS = {
+  '\u0D05': 'a',  '\u0D06': 'aa', '\u0D07': 'i',  '\u0D08': 'ii',
+  '\u0D09': 'u',  '\u0D0A': 'uu', '\u0D0B': 'r̥',  '\u0D60': 'r̥̄',
+  '\u0D0E': 'e',  '\u0D0F': 'ee', '\u0D10': 'ai',
+  '\u0D12': 'o',  '\u0D13': 'oo', '\u0D14': 'au',
+  '\u0D0D': 'l̥',  '\u0D61': 'l̥̄'
+};
+
+const VOWEL_SIGNS = {
+  '\u0D3E': 'aa', '\u0D3F': 'i',  '\u0D40': 'ii',
+  '\u0D41': 'u',  '\u0D42': 'uu',
+  '\u0D43': 'r̥',  '\u0D44': 'r̥̄',
+  '\u0D46': 'e',  '\u0D47': 'ee', '\u0D48': 'ai',
+  '\u0D4A': 'o',  '\u0D4B': 'oo', '\u0D4C': 'au',
+  '\u0D57': 'au',
+  '\u0D62': 'l̥',  '\u0D63': 'l̥̄'
+};
+
+const CONSONANTS = {
+  '\u0D15': 'ka',  '\u0D16': 'kha', '\u0D17': 'ga',  '\u0D18': 'gha', '\u0D19': 'n̆a',
+  '\u0D1A': 'cha', '\u0D1B': 'chha','\u0D1C': 'ja',  '\u0D1D': 'jha','\u0D1E': 'n̄a',
+  '\u0D1F': 'ṭa',  '\u0D20': 'ṭha', '\u0D21': 'ḍa',  '\u0D22': 'ḍha','\u0D23': 'ṇa',
+  '\u0D24': 'ta',  '\u0D25': 'tha', '\u0D26': 'da',  '\u0D27': 'dha','\u0D28': 'na',
+  '\u0D2A': 'pa',  '\u0D2B': 'pha', '\u0D2C': 'ba',  '\u0D2D': 'bha','\u0D2E': 'ma',
+  '\u0D2F': 'ya',  '\u0D30': 'ra',  '\u0D31': 'ṟa',  '\u0D32': 'la',
+  '\u0D33': 'ḷa',  '\u0D34': 'ḻa',  '\u0D35': 'va',
+  '\u0D36': 'sha', '\u0D37': 'ṣa',  '\u0D38': 'sa',  '\u0D39': 'ha',
+  '\u0D3A': 'ṯa'
+};
+
+// Chillu characters (pure consonant without inherent vowel)
+const CHILLUS = {
+  '\u0D7A': 'n',  '\u0D7B': 'n',  '\u0D7C': 'r',
+  '\u0D7D': 'l',  '\u0D7E': 'ḷ',  '\u0D7F': 'k'
+};
+
+const VIRAMA = '\u0D4D'; // Chandrakkala
+const ANUSVARAM = '\u0D02'; // Anusvaram (m)
+const VISARGAM = '\u0D03'; // Visargam (ḥ)
+
+function transliterateWord(malWord) {
+  let result = '';
+  const chars = [...malWord];
+  let i = 0;
+
+  while (i < chars.length) {
+    const ch = chars[i];
+    const code = ch.charCodeAt(0);
+
+    // Independent vowel
+    if (INDEPENDENT_VOWELS[ch]) {
+      result += INDEPENDENT_VOWELS[ch];
+      i++;
+      continue;
+    }
+
+    // Anusvaram
+    if (ch === ANUSVARAM) {
+      result += 'ṁ';
+      i++;
+      continue;
+    }
+
+    // Visargam
+    if (ch === VISARGAM) {
+      result += 'ḥ';
+      i++;
+      continue;
+    }
+
+    // Chillus
+    if (CHILLUS[ch]) {
+      result += CHILLUS[ch];
+      i++;
+      continue;
+    }
+
+    // Consonant
+    if (CONSONANTS[ch]) {
+      const base = CONSONANTS[ch];
+      const inherentVowel = base.slice(-1); // 'a'
+      const consonantCore = base.slice(0, -1);
+      let nextIdx = i + 1;
+
+      // Check for virama (halant) - suppress inherent vowel
+      if (nextIdx < chars.length && chars[nextIdx] === VIRAMA) {
+        result += consonantCore;
+        i = nextIdx + 1;
+        continue;
+      }
+
+      // Check for vowel sign
+      if (nextIdx < chars.length && VOWEL_SIGNS[chars[nextIdx]]) {
+        result += consonantCore + VOWEL_SIGNS[chars[nextIdx]];
+        i = nextIdx + 1;
+        continue;
+      }
+
+      // Consonant with inherent vowel
+      result += base;
+      i++;
+      continue;
+    }
+
+    // Virama standalone (shouldn't normally happen)
+    if (ch === VIRAMA) {
+      i++;
+      continue;
+    }
+
+    // Any other character (space, punctuation, numbers, etc.)
+    result += ch;
+    i++;
+  }
+
+  return result;
+}
+
+function isMalayalamChar(ch) {
+  const code = ch.charCodeAt(0);
+  return code >= 0x0D00 && code <= 0x0D7F;
+}
+
+function isMalayalamWord(word) {
+  return [...word].some(c => isMalayalamChar(c));
+}
+
+// ============================================================
+// SAMPLE TEXTS
+// ============================================================
+
+const TEXTS = [
+  {
+    id: 'ramayana',
+    title: 'Adhyatma Ramayanam',
+    source: 'Thunchaththu Ezhuthachan (excerpt)',
+    text: `ഹരി ശ്രീരാമനെന്നു മനസ്സിലാ
+വരിച്ചുരുതി വാഴ്ന്നൊരുദിവസം
+മരതകപ്പുറത്തു രാമന്റെ
+വിരല്പിടിച്ചു നടക്കും നേരം
+
+പരമപുരുഷനാം രാമന്റെ
+കരങ്ങളിലെ മൃദു ചൂടിട്ടു
+വരിവരിയായി നില്ക്കും ദേവ
+ഹരിവരദനമെന്നു ചൊല്ലിടും`
+  },
+  {
+    id: 'kumaranasan',
+    title: 'Veena Poovu',
+    source: 'Kumaran Asan (excerpt)',
+    text: `ഉദയപ്പൊൻ തിങ്കൾ പോലെ
+ഏദേശം തൻ പുത്രി മുമ്പൊ
+ഏദേശം തൻ പുത്രി മുമ്പൊ
+വിദ്യാദാന വിദ്യാവിലാസം
+കൊണ്ടാടിയ ചേലാവതി
+
+ചഞ്ചലമാം ചിറ്റേക്കാലം
+തിങ്കൾ നാളിൻ ചില പൊൻ നാളുകൾ
+കൺകുളിർക്കെ കണ്ടു നിൽക്കേ
+കാലം പോലും കാൺ മറന്നു`
+  },
+  {
+    id: 'vayalar',
+    title: 'Bhoomikkoru Charamageetham',
+    source: 'Vayalar Ramavarma (excerpt)',
+    text: `ഭൂമിക്കൊരു ചരമഗീതം
+ആരെങ്കിലും പാടണം
+അന്ത്യമില്ലാ ഗാനങ്ങളൊ
+ന്നും ഇവിടെ പൊരുതുതാം
+
+ആദിയുമന്തവും ഇല്ലാത്ത
+ഏകാന്ത നിമിഷങ്ങളിൽ
+സായന്തന നീലിമയിൽ
+ഒരു തീപ്പൊരി പോലെ ഞാൻ`
+  },
+  {
+    id: 'basheer',
+    title: 'Balyakalasakhi (excerpt)',
+    source: 'Vaikom Muhammad Basheer',
+    text: `എന്റെ പേര് മജീദ്. ഞാൻ ഇവിടെ
+വളരെ കാലമായി താമസിക്കുന്നു.
+എന്റെ അച്ഛന് ധാരാളം പണമുണ്ടായിരുന്നു.
+അതുകൊണ്ട് ഞങ്ങൾ സുഖമായി ജീവിച്ചു.
+
+ഞാൻ പഠിക്കാൻ മോശമായിരുന്നു.
+എന്നാൽ എനിക്ക് കഥകൾ എഴുതാൻ
+വളരെ ഇഷ്ടമായിരുന്നു.`
+  },
+  {
+    id: 'proverbs',
+    title: 'Malayalam Proverbs',
+    source: 'Traditional sayings',
+    text: `ആന വന്നാലും ആശാരി പോകരുത്.
+കണ്ടതിനെല്ലാം കല്പന കൂടാ.
+ചോദിച്ചാൽ പത്തു പേർക്ക് അറിയാം.
+ദുഃഖം വന്നാൽ ദൈവം ഓർമ്മ വരും.
+നാവിന് എല്ലില്ല എന്ന് പറയും.
+
+അധ്വാനിച്ചാൽ അരിയുണ്ടാകും.
+ഇല്ലാത്ത ഊരിൽ ഇരുന്നാൽ ഇല്ല.
+കിട്ടുന്നത് കൊണ്ട് തൃപ്തിപ്പെടണം.
+ഗുരുവിനെ ബഹുമാനിക്കണം.
+ഘനം കുറഞ്ഞാൽ ആയുസ്സ് കുറയും.`
+  },
+  {
+    id: 'madhavikutty',
+    title: 'Neermathalam',
+    source: 'Kamala Surayya / Madhavikutty (excerpt)',
+    text: `നീർമാതളം പൂത്ത കാലം
+എന്റെ അമ്മ ജീവിച്ചിരുന്നു
+അമ്മയുടെ മുടിയിൽ നീർമാതളപ്പൂ
+എന്റെ ബാല്യത്തിന്റെ ഗന്ധം
+
+പഴയ വീടിന്റെ മുറ്റത്ത്
+ഒരു നീർമാതളമരം
+അതിന്റെ കീഴിൽ ഞങ്ങൾ
+കഥകൾ പറഞ്ഞിരുന്നു`
+  }
+];
+
+// ============================================================
+// APP STATE
+// ============================================================
+
+let currentText = null;
+let currentIndex = -1;
+let translitVisible = false;
+let translateVisible = false;
+let activeTouched = null;
+let mobileTipTimer = null;
+
+// ============================================================
+// INITIALIZATION
+// ============================================================
+
+function init() {
+  buildTextSelector();
+}
+
+function buildTextSelector() {
+  const container = document.getElementById('textSelector');
+  TEXTS.forEach((t, idx) => {
+    const btn = document.createElement('button');
+    btn.textContent = t.title;
+    btn.onclick = () => loadText(idx);
+    container.appendChild(btn);
+  });
+}
+
+// ============================================================
+// TEXT LOADING
+// ============================================================
+
+function showRandomText() {
+  let idx;
+  do {
+    idx = Math.floor(Math.random() * TEXTS.length);
+  } while (idx === currentIndex && TEXTS.length > 1);
+  loadText(idx);
+}
+
+function loadText(idx) {
+  currentIndex = idx;
+  currentText = TEXTS[idx];
+
+  // Update selector buttons
+  document.querySelectorAll('.text-selector button').forEach((btn, i) => {
+    btn.classList.toggle('active', i === idx);
+  });
+
+  // Render text with word spans
+  renderMalayalamText(currentText.text);
+
+  // Update source info
+  document.getElementById('sourceInfo').textContent =
+    `Source: ${currentText.title} — ${currentText.source}`;
+
+  // Enable buttons
+  document.getElementById('btnTransliterate').disabled = false;
+  document.getElementById('btnTranslate').disabled = false;
+
+  // Hide panels
+  translitVisible = false;
+  translateVisible = false;
+  updatePanelVisibility();
+}
+
+function renderMalayalamText(text) {
+  const container = document.getElementById('textDisplay');
+  container.innerHTML = '';
+
+  const lines = text.split('\n');
+  lines.forEach((line, lineIdx) => {
+    if (lineIdx > 0) container.appendChild(document.createTextNode('\n'));
+
+    // Split line into tokens (words and non-word chars)
+    const tokens = line.split(/([\s]+)/);
+    tokens.forEach(token => {
+      if (!token) return;
+
+      if (/^\s+$/.test(token)) {
+        container.appendChild(document.createTextNode(token));
+      } else if (isMalayalamWord(token)) {
+        const span = document.createElement('span');
+        span.className = 'word';
+        span.textContent = token;
+
+        const translit = transliterateWord(token);
+        const tip = document.createElement('span');
+        tip.className = 'tip';
+        tip.textContent = translit;
+        span.appendChild(tip);
+
+        // Mobile touch support
+        span.addEventListener('touchstart', handleTouch, { passive: true });
+        span.addEventListener('touchend', handleTouchEnd);
+
+        container.appendChild(span);
+      } else {
+        container.appendChild(document.createTextNode(token));
+      }
+    });
+  });
+}
+
+// ============================================================
+// MOBILE TOUCH HANDLING
+// ============================================================
+
+function handleTouch(e) {
+  const word = e.currentTarget;
+  if (activeTouched) activeTouched.classList.remove('touched');
+  word.classList.add('touched');
+  activeTouched = word;
+
+  const translit = transliterateWord(word.textContent);
+  const mobileTip = document.getElementById('mobileTip');
+  mobileTip.textContent = translit;
+  mobileTip.classList.add('visible');
+
+  clearTimeout(mobileTipTimer);
+  mobileTipTimer = setTimeout(() => {
+    mobileTip.classList.remove('visible');
+    word.classList.remove('touched');
+    activeTouched = null;
+  }, 2500);
+}
+
+function handleTouchEnd(e) {
+  // Keep visible for timeout period, handled in handleTouch
+}
+
+// ============================================================
+// CUSTOM TEXT INPUT
+// ============================================================
+
+function toggleCustomInput() {
+  const panel = document.getElementById('customPanel');
+  const btn = document.getElementById('btnCustom');
+  panel.classList.toggle('hidden');
+  btn.classList.toggle('active');
+  if (!panel.classList.contains('hidden')) {
+    document.getElementById('customTextArea').focus();
+  }
+}
+
+function loadCustomText() {
+  const text = document.getElementById('customTextArea').value;
+  if (!text || !text.trim()) return;
+
+  currentText = {
+    id: 'custom',
+    title: 'Custom Text',
+    source: 'User provided',
+    text: text.trim()
+  };
+  currentIndex = -1;
+
+  document.querySelectorAll('.text-selector button').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.text-selector button').forEach(btn => btn.classList.remove('active'));
+
+  renderMalayalamText(currentText.text);
+  document.getElementById('sourceInfo').textContent = 'Source: Custom text';
+  document.getElementById('btnTransliterate').disabled = false;
+  document.getElementById('btnTranslate').disabled = false;
+
+  translitVisible = false;
+  translateVisible = false;
+  updatePanelVisibility();
+
+  toggleCustomInput();
+}
+
+// ============================================================
+// TRANSLITERATION PANEL
+// ============================================================
+
+function toggleTransliteration() {
+  translitVisible = !translitVisible;
+  if (translateVisible && translitVisible) {
+    // Keep both visible
+  }
+  updatePanelVisibility();
+
+  if (translitVisible && currentText) {
+    const lines = currentText.text.split('\n');
+    const translitLines = lines.map(line => {
+      const tokens = line.split(/([\s]+)/);
+      return tokens.map(token => {
+        if (!token) return '';
+        if (/^\s+$/.test(token)) return token;
+        if (isMalayalamWord(token)) return transliterateWord(token);
+        return token;
+      }).join('');
+    });
+    document.getElementById('transliterationDisplay').textContent = translitLines.join('\n');
+  }
+}
+
+// ============================================================
+// TRANSLATION PANEL (via MyMemory API)
+// ============================================================
+
+async function toggleTranslation() {
+  translateVisible = !translateVisible;
+  updatePanelVisibility();
+
+  if (translateVisible && currentText) {
+    const display = document.getElementById('translationDisplay');
+    display.innerHTML = '<div class="loading"><div class="spinner"></div> Translating...</div>';
+
+    try {
+      const translation = await translateText(currentText.text);
+      display.textContent = translation;
+    } catch (err) {
+      display.innerHTML = `<span style="color:#c2185b">Translation unavailable. ${err.message}</span>`;
+    }
+  }
+}
+
+async function translateText(text) {
+  // MyMemory has a 500 byte limit per request, so split into chunks
+  const lines = text.split('\n');
+  const chunks = [];
+  let currentChunk = '';
+
+  for (const line of lines) {
+    if ((currentChunk + '\n' + line).length > 400) {
+      if (currentChunk) chunks.push(currentChunk);
+      currentChunk = line;
+    } else {
+      currentChunk = currentChunk ? currentChunk + '\n' + line : line;
+    }
+  }
+  if (currentChunk) chunks.push(currentChunk);
+
+  const translations = [];
+  for (const chunk of chunks) {
+    const encoded = encodeURIComponent(chunk);
+    const url = `https://api.mymemory.translated.net/get?q=${encoded}&langpair=ml|en`;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`API error: ${resp.status}`);
+    const data = await resp.json();
+    if (data.responseStatus === 200) {
+      translations.push(data.responseData.translatedText);
+    } else {
+      translations.push('[Translation unavailable for this segment]');
+    }
+    // Small delay between requests
+    await new Promise(r => setTimeout(r, 300));
+  }
+
+  return translations.join('\n');
+}
+
+// ============================================================
+// PANEL VISIBILITY
+// ============================================================
+
+function updatePanelVisibility() {
+  const btn1 = document.getElementById('btnTransliterate');
+  const btn2 = document.getElementById('btnTranslate');
+  const panel1 = document.getElementById('transliterationPanel');
+  const panel2 = document.getElementById('translationPanel');
+
+  btn1.classList.toggle('active', translitVisible);
+  btn2.classList.toggle('active', translateVisible);
+  panel1.classList.toggle('hidden', !translitVisible);
+  panel2.classList.toggle('hidden', !translateVisible);
+}
+
+// ============================================================
+// START
+// ============================================================
+
+init();
+</script>
+</body>
+</html>
