@@ -41,47 +41,47 @@ The app uses a modified **Mozhi** romanization — an ASCII-friendly phonetic sc
 
 ### Independent Vowels
 
-| Malayalam | Name | Output |
-|-----------|------|--------|
-| അ | a | `a` |
-| ആ | aa | `aa` |
-| ഇ | i | `i` |
-| ഈ | ii | `ii` |
-| ഉ | u | `u` |
-| ഊ | uu | `uu` |
-| ഋ | r̥ | `r̥` |
-| ൠ | r̥̄ | `r̥̄` |
-| ഌ | l̥ | `l̥` |
-| ൡ | l̥̄ | `l̥̄` |
-| എ | e | `e` |
-| ഏ | ee | `ee` |
-| ഐ | ai | `ai` |
-| ഒ | o | `o` |
-| ഓ | oo | `oo` |
-| ഔ | au | `au` |
+| Malayalam | Name | Hindi | Output |
+|-----------|------|-------|--------|
+| അ | a | अ | `a` |
+| ആ | aa | आ | `aa` |
+| ഇ | i | इ | `i` |
+| ഈ | ii | ई | `ii` |
+| ഉ | u | उ | `u` |
+| ഊ | uu | ऊ | `uu` |
+| ഋ | r̥ | ऋ | `r̥` |
+| ൠ | r̥̄ | ॠ | `r̥̄` |
+| ഌ | l̥ | ऌ | `l̥` |
+| ൡ | l̥̄ | ॡ | `l̥̄` |
+| എ | e | — | `e` |
+| ഏ | ee | ए | `ee` |
+| ഐ | ai | ऐ | `ai` |
+| ഒ | o | — | `o` |
+| ഓ | oo | ओ | `oo` |
+| ഔ | au | औ | `au` |
 
 ### Consonants
 
 Every consonant carries an inherent `a` vowel. The transliteration drops this `a` only when a vowel sign follows or when a virama (chandrakkala) suppresses it.
 
-| Malayalam | Output | | Malayalam | Output | | Malayalam | Output |
-|-----------|--------|-|-----------|--------|-|-----------|--------|
-| ക | `ka` | | ട | `ṭa` | | പ | `pa` |
-| ഖ | `kha` | | ഠ | `ṭha` | | ഫ | `pha` |
-| ഗ | `ga` | | ഡ | `ḍa` | | ബ | `ba` |
-| ഘ | `gha` | | ഢ | `ḍha` | | ഭ | `bha` |
-| ങ | `ṅa` | | ണ | `ṇa` | | മ | `ma` |
-| ച | `cha` | | ത | `ta` | | യ | `ya` |
-| ഛ | `chha` | | ഥ | `tha` | | ര | `ra` |
-| ജ | `ja` | | ദ | `da` | | റ | `ṟa` |
-| ഝ | `jha` | | ധ | `dha` | | ല | `la` |
-| ഞ | `ña` | | ന | `na` | | ള | `ḷa` |
-| | | | | | | ഴ | `ḻa` |
-| | | | | | | വ | `va` |
-| | | | | | | ശ | `sha` |
-| | | | | | | ഷ | `ṣa` |
-| | | | | | | സ | `sa` |
-| | | | | | | ഹ | `ha` |
+| Malayalam | Hindi | Output | | Malayalam | Hindi | Output | | Malayalam | Hindi | Output |
+|-----------|-------|--------|-|-----------|-------|--------|-|-----------|-------|--------|
+| ക | क | `ka` | | ട | ट | `ṭa` | | പ | प | `pa` |
+| ഖ | ख | `kha` | | ഠ | ठ | `ṭha` | | ഫ | फ | `pha` |
+| ഗ | ग | `ga` | | ഡ | ड | `ḍa` | | ബ | ब | `ba` |
+| ഘ | घ | `gha` | | ഢ | ढ | `ḍha` | | ഭ | भ | `bha` |
+| ങ | ङ | `ṅa` | | ണ | ण | `ṇa` | | മ | म | `ma` |
+| ച | च | `cha` | | ത | त | `ta` | | യ | य | `ya` |
+| ഛ | छ | `chha` | | ഥ | थ | `tha` | | ര | र | `ra` |
+| ജ | ज | `ja` | | ദ | द | `da` | | റ | ऱ | `ṟa` |
+| ഝ | झ | `jha` | | ധ | ध | `dha` | | ല | ल | `la` |
+| ഞ | ञ | `ña` | | ന | न | `na` | | ള | ळ | `ḷa` |
+| | | | | | | ഴ | — | `ḻa` |
+| | | | | | | വ | व | `va` |
+| | | | | | | ശ | श | `sha` |
+| | | | | | | ഷ | ष | `ṣa` |
+| | | | | | | സ | स | `sa` |
+| | | | | | | ഹ | ह | `ha` |
 
 ### Vowel Signs (Modifiers)
 
@@ -116,14 +116,14 @@ This is how consonant clusters work: ന + ് + ത = `nta`.
 
 Chillus are standalone consonant forms without any inherent vowel. They appear at word endings:
 
-| Chillus | Output |
-|---------|--------|
-| ൺ | `n` |
-| ൻ | `n` |
-| ർ | `r` |
-| ൽ | `l` |
-| ൾ | `ḷ` |
-| ൿ | `k` |
+| Chillus | Hindi | Output |
+|---------|-------|--------|
+| ൺ | न | `n` |
+| ൻ | न | `n` |
+| ർ | र | `r` |
+| ൽ | ल | `l` |
+| ൾ | ळ | `ḷ` |
+| ൿ | क | `k` |
 
 ### Other Signs
 
