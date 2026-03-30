@@ -1,5 +1,9 @@
-import { redirect } from "next/navigation";
-
 export default function Home() {
-  redirect("/malayalam-reader.html");
+  return (
+    <iframe
+      src="/malayalam-reader.html"
+      style={{ border: "none", width: "100%", height: "100dvh" }}
+      title="Malayalam Reader"
+    />
+  );
 }
