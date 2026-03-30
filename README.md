@@ -4,7 +4,7 @@ A browser-based reading aid for Malayalam text. Hover or tap any word to see its
 
 Built for people who can understand spoken Malayalam but find reading slow. **This is not a language learning tool** — just a reading speed trainer.
 
-Click the live [page here](https://github.com/arun-ks/TransliterateMalayalam) to use this.
+Click the live [page here](https://arun-ks.github.io/TransliterateMalayalam) to use this.
 
 This was generated using AppBuiler of [kilo.ai](https://kilo.ai)
 
