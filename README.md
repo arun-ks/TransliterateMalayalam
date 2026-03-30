@@ -26,12 +26,12 @@ Newlines and paragraph breaks in the source text are preserved.
 
 ## Deployment
 
-Just rename the file to `index.html` and host it anywhere:
+Hosted via [GitHub Pages](https://pages.github.com/). To deploy:
 
-- **GitHub Pages** — push to a repo, enable Pages in settings
-- **Vercel** — import the repo, hit deploy (auto-detected as static)
-- **Netlify** — drag and drop the file
-- **Local** — open `index.html` directly in a browser
+1. Go to **Settings > Pages** in the repo
+2. Set **Source** to "Deploy from a branch"
+3. Select the `main` branch, `/ (root)` folder
+4. Save — the site will be live at `https://<username>.github.io/<repo-name>/`
 
 No server, no environment variables, no config.
 
