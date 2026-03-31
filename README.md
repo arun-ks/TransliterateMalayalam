@@ -17,6 +17,9 @@ This was generated using AppBuiler of [kilo.ai](https://kilo.ai)
 4. Click **Transliteration** to see the full text in Latin script.
 5. Click **Translation** to get an English translation via [MyMemory API](https://mymemory.translated.net/).
 
+### URL Parameter
+
+Alternateively, the user can pass the Malayalam text as URL parameters as in `?MlText=<malayalam text>` & it would auto load when the page is rendered.
 
 ## Transliteration Scheme
 
