@@ -152,12 +152,12 @@
   </header>
 
   <div class="controls">
-    <button class="btn btn-secondary" id="btnPaste" onclick="togglePaste()">Paste Malayalam Text</button>
+    <button class="btn btn-secondary active" id="btnPaste" onclick="togglePaste()">Paste Malayalam Text</button>
     <button class="btn btn-secondary" id="btnXlit" onclick="toggleXlit()" disabled>Transliteration</button>
     <button class="btn btn-secondary" id="btnTrans" onclick="toggleTrans()" disabled>Translation</button>
   </div>
 
-  <div class="paste-area hidden" id="pasteArea">
+  <div class="paste-area" id="pasteArea">
     <textarea id="pasteInput" placeholder="Paste Malayalam text here..."></textarea>
     <div class="actions">
       <button class="btn btn-primary" onclick="loadPasted()">Load</button>
@@ -260,6 +260,7 @@ let text=null, xlitOn=false, transOn=false, touched=null, tipTimer=null;
 render(DEFAULT);
 document.getElementById('sourceInfo').textContent='Malayalam Proverbs';
 enableBtns();
+document.getElementById('pasteInput').focus();
 
 // ── Render ─────────────────────────────────────────────────
 function render(t){
