@@ -257,10 +257,21 @@ const DEFAULT = `ആന വന്നാലും ആശാരി പോകരു
 let text=null, xlitOn=false, transOn=false, touched=null, tipTimer=null;
 
 // ── Init ───────────────────────────────────────────────────
-render(DEFAULT);
-document.getElementById('sourceInfo').textContent='Malayalam Proverbs';
-enableBtns();
-document.getElementById('pasteInput').focus();
+const urlParams=new URLSearchParams(window.location.search);
+const mlText=urlParams.get('MlText');
+if(mlText){
+  const decoded=decodeURIComponent(mlText);
+  document.getElementById('pasteInput').value=decoded;
+  render(decoded);
+  xlitOn=true;updatePanels();
+  enableBtns();
+  togglePaste();
+}else{
+  render(DEFAULT);
+  document.getElementById('sourceInfo').textContent='Malayalam Proverbs';
+  enableBtns();
+  document.getElementById('pasteInput').focus();
+}
 
 // ── Render ─────────────────────────────────────────────────
 function render(t){
