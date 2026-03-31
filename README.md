@@ -21,7 +21,7 @@ This was generated using AppBuiler of [kilo.ai](https://kilo.ai)
 
 Alternateively, the user can pass the Malayalam text as URL parameters as in `?MlText=<malayalam text>` & it would auto load when the page is rendered.
 
-As in this example [https://arun-ks.github.io/TransliterateMalayalam/?MlText=പരിശീലനം പൂർണത കൈവരിക്കുന്നു](https://arun-ks.github.io/TransliterateMalayalam/?MlText=പരിശീലനം പൂർണത കൈവരിക്കുന്നു)
+As in this example [https://arun-ks.github.io/TransliterateMalayalam/?MlText=...](https://arun-ks.github.io/TransliterateMalayalam/?MlText=പരിശീലനം%20cപൂർണത%20cകൈവരിക്കുന്നു)
 
 ## Transliteration Scheme
 
