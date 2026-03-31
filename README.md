@@ -21,6 +21,8 @@ This was generated using AppBuiler of [kilo.ai](https://kilo.ai)
 
 Alternateively, the user can pass the Malayalam text as URL parameters as in `?MlText=<malayalam text>` & it would auto load when the page is rendered.
 
+As in this example [https://arun-ks.github.io/TransliterateMalayalam/?MlText=പരിശീലനം പൂർണത കൈവരിക്കുന്നു](https://arun-ks.github.io/TransliterateMalayalam/?MlText=പരിശീലനം പൂർണത കൈവരിക്കുന്നു)
+
 ## Transliteration Scheme
 
 The app uses a modified **Mozhi** romanization — an ASCII-friendly phonetic scheme widely used for Malayalam transliteration. Each Malayalam character maps to a predictable Latin equivalent.
