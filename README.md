@@ -153,7 +153,7 @@ English translation uses the [MyMemory Translation API](https://mymemory.transla
 |--------|------|
 | [ml.wikisource.org](https://ml.wikisource.org) | Public domain literary works |
 | [ml.wikipedia.org](https://ml.wikipedia.org) | Encyclopedic articles |
-| [https://luca.co.in/](https://luca.co.in/)| Science based content |
+| [luca.co.in](https://luca.co.in/)| Science based content |
 | [Deshabhimani](https://www.deshabhimani.com/)     | Current News|
 | [Kerala Kaumudi](https://keralakaumudi.com/news/) | Current News|
 | [Mathrubhumi](https://www.mathrubhumi.com/)       | Current News|
