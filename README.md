@@ -1,12 +1,10 @@
 # Malayalam Reader
 
-A browser-based reading aid for Malayalam text. Hover or tap any word to see its English phonetic pronunciation. Shows full text transliteration and English translation on demand.
+A browser-based reading aid for Malayalam text. Hover or tap any word to see its English phonetic pronunciation.
 
-Built for people who can understand spoken Malayalam but find reading slow. **This is not a language learning tool** — just a reading speed trainer.
+Built with [kilo.ai](https://kilo.ai) for people who can understand Malayalam, know its alphabet, but want to improve their reading speed. **This is not a language learning tool** — just a reading speed trainer.
 
 Click the live [page here](https://arun-ks.github.io/TransliterateMalayalam) to use this.
-
-This was generated using [AppBuiler of kilo.ai](https://kilo.ai)
 
 
 ## How It Works
@@ -139,7 +137,7 @@ Chillus are standalone consonant forms without any inherent vowel. They appear a
 
 English translation uses the [MyMemory Translation API](https://mymemory.translated.net/doc/spec.php), a free service.
 
-### Limits
+### Limits (for Translation)
 
 | Tier | Daily character limit |
 |------|-----------------------|
@@ -147,14 +145,7 @@ English translation uses the [MyMemory Translation API](https://mymemory.transla
 | With valid email (`de` param) | **50,000 characters** |
 | Per request | **500 bytes** |
 
-The app handles the per-request limit by chunking text into segments of ~400 characters with a 300ms delay between requests.
-
-### What This Means in Practice
-
-- A typical Malayalam news article (~2,000 chars) can be translated **2-3 times per day** on the anonymous tier.
-- For heavier use, you can add your email to the API call (the `de` parameter in the `translate()` function) to get 50,000 chars/day.
 - The daily limit resets at **UTC midnight**.
-- Transliteration has **no limits** — it runs entirely in the browser with no API calls.
 
 ## Where to Get Malayalam Text
 
