@@ -2,7 +2,12 @@
 
 A browser-based reading aid for Malayalam text. Hover or tap any word to see its English phonetic pronunciation. Shows full text transliteration and English translation on demand.
 
-Built for people who can understand spoken Malayalam but find reading slow. Not a language learning tool — just a reading speed trainer.
+Built for people who can understand spoken Malayalam but find reading slow. **This is not a language learning tool** — just a reading speed trainer.
+
+Click the live [page here](https://arun-ks.github.io/TransliterateMalayalam) to use this.
+
+This was generated using [AppBuiler of kilo.ai](https://kilo.ai)
+
 
 ## How It Works
 
@@ -12,28 +17,11 @@ Built for people who can understand spoken Malayalam but find reading slow. Not 
 4. Click **Transliteration** to see the full text in Latin script.
 5. Click **Translation** to get an English translation via [MyMemory API](https://mymemory.translated.net/).
 
-Newlines and paragraph breaks in the source text are preserved.
+### URL Parameter
 
-## Features
+Alternateively, the user can pass the Malayalam text as URL parameters as in `?MlText=<malayalam text>` & it would auto load when the page is rendered.
 
-- Single HTML file, zero dependencies, no build step
-- Built-in transliteration engine — works fully offline
-- Word-level phonetic tooltips on hover/tap
-- Full-text transliteration panel
-- English translation panel (requires internet)
-- Mobile-first responsive layout
-- Noto Serif Malayalam font loaded from Google Fonts
-
-## Deployment
-
-Hosted via [GitHub Pages](https://pages.github.com/). To deploy:
-
-1. Go to **Settings > Pages** in the repo
-2. Set **Source** to "Deploy from a branch"
-3. Select the `main` branch, `/ (root)` folder
-4. Save — the site will be live at `https://<username>.github.io/<repo-name>/`
-
-No server, no environment variables, no config.
+As in this example [https://arun-ks.github.io/TransliterateMalayalam/?MlText=...](https://arun-ks.github.io/TransliterateMalayalam/?MlText=പരിശീലനം%20പൂർണത%20കൈവരിക്കുന്നു)
 
 ## Transliteration Scheme
 
@@ -174,7 +162,11 @@ The app handles the per-request limit by chunking text into segments of ~400 cha
 |--------|------|
 | [ml.wikisource.org](https://ml.wikisource.org) | Public domain literary works |
 | [ml.wikipedia.org](https://ml.wikipedia.org) | Encyclopedic articles |
-| Malayalam news sites (Mathrubhumi, Manorama) | Current news, conversational style |
+| [https://luca.co.in/](https://luca.co.in/)| Science based content |
+| [Deshabhimani](https://www.deshabhimani.com/)     | Current News|
+| [Kerala Kaumudi](https://keralakaumudi.com/news/) | Current News|
+| [Mathrubhumi](https://www.mathrubhumi.com/)       | Current News|
+| [Manorama](https://www.manoramanews.com/)         | Current News|
 | [archive.org](https://archive.org) — search "Malayalam" | Scanned books |
 
 **Suggested progression** for building reading speed:
@@ -185,5 +177,4 @@ The app handles the per-request limit by chunking text into segments of ~400 cha
 4. Literary excerpts (poetry, novels)
 
 ## License
-
 Do whatever you want with it.
