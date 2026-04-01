@@ -2,7 +2,7 @@
 
 A browser-based reading aid for Malayalam text. Hover or tap any word to see its English phonetic pronunciation.
 
-Built with [kilo.ai](https://kilo.ai) for people who can understand Malayalam, know its alphabet, but want to improve their reading speed. **This is not a language learning tool** — just a reading speed trainer.
+Built with [kilo.ai](https://kilo.ai) for people who can understand Malayalam, know its alphabet, but want to improve their reading speed. **This is not a language learning tool**,  just a reading speed trainer.
 
 Click the live [page here](https://arun-ks.github.io/TransliterateMalayalam) to use this.
 
