@@ -130,7 +130,8 @@
     transition: opacity 0.2s; max-width: 90vw; text-align: center;
   }
   @media (hover: none) and (pointer: coarse) {
-    .malayalam-text .word .tip { display: none !important; }
+    .malayalam-text .word .tip,
+    .malayalam-text .word.touched .tip { display: none !important; }
     .tip-mobile { display: block; opacity: 0; }
     .tip-mobile.visible { opacity: 1; }
   }
